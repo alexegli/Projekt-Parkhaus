@@ -1,44 +1,43 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-const int servoPin = 2;        // Servo an GP2
-HardwareSerial picoCom(0);     // UART auf GP0 (RX) und GP1 (TX)
-
 Servo schranke;
-String empfang = "";
+const int SERVO_PIN = 8;   
+
+String kennzeichen = "";
+bool bezahlt = false;
 
 void setup() {
-  Serial.begin(115200);
-  picoCom.begin(9600);
-  schranke.attach(servoPin);
-  schranke.write(0);           // Schranke zu
-  Serial.println("Pico 2 (Schranke) bereit");
+  Serial.begin(115200);      
+  Serial1.begin(9600);       
+
+  schranke.attach(SERVO_PIN);
+  schranke.write(0);         
+  Serial.println("Ausfahrt-Pico bereit");
 }
 
 void loop() {
-  // Nachricht von Pico 1 empfangen
-  while (picoCom.available()) {
-    char c = picoCom.read();
-    if (c == '\n') {
-      empfang.trim();
-      if (empfang.startsWith("EIN:")) {
-        String kennzeichen = empfang.substring(4);
-        Serial.print("Kennzeichen empfangen: ");
-        Serial.println(kennzeichen);
-        schrankeOeffnen();
-      }
-      empfang = "";
-    } else {
-      empfang += c;
+  
+  if (Serial1.available()) {
+    String data = Serial1.readStringUntil('\n');
+    data.trim();
+    if (data.startsWith("EINF:")) {
+      kennzeichen = data.substring(5);
+      bezahlt = false;
+      Serial.print("Fahrzeug eingefahren: ");
+      Serial.println(kennzeichen);
+    }
+  }
+
+  
+  if (Serial.available()) {
+    char c = Serial.read();
+    if (c == 'p' && kennzeichen != "") {
+      bezahlt = true;
+      Serial.println("Bezahlung erhalten - Schranke oeffnet");
+      schranke.write(90);    
+      delay(3000);           
+      schranke.write(0);     
     }
   }
 }
-
-void schrankeOeffnen() {
-  schranke.write(90);          // Schranke auf
-  Serial.println("Schranke geoeffnet");
-  delay(3000);                 // 3 Sekunden offen
-  schranke.write(0);           // Schranke zu
-  Serial.println("Schranke geschlossen");
-}
-
