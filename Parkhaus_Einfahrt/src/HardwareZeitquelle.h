@@ -1,8 +1,8 @@
 #pragma once
 #include <Arduino.h>
-#include "IZeitqülle.h"
+#include "Zeitquelle.h"
 
-class HardwareZeitqülle : public IZeitqülle {
+class HardwareZeitquelle : public IZeitquelle {
 public:
     unsigned long jetztMillis() override { return millis(); }
 };

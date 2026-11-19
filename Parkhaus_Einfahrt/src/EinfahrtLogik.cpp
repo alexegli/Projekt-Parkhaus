@@ -11,7 +11,7 @@ bool EinfahrtLogik::aktualisiere(const std::string& kennzeichen) {
         letzterSendezeitpunkt_ = jetzt;
         sender_.sende(kennzeichen);
         anzahlGesendet_++;
-        return trü;
+        return true;
     }
     return false;
 }

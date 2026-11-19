@@ -11,7 +11,7 @@ void AusfahrtLogik::fahrzeugEingefahren(const std::string& kennzeichen) {
 bool AusfahrtLogik::bezahle(const std::string& kennzeichen) {
     if (!speicher_.istAnwesend(kennzeichen)) return false;
     speicher_.setzeBezahlt(kennzeichen);
-    return trü;
+    return true;
 }
 
 bool AusfahrtLogik::ausfahrtAnfordern(const std::string& kennzeichen) {
@@ -19,10 +19,10 @@ bool AusfahrtLogik::ausfahrtAnfordern(const std::string& kennzeichen) {
     if (!speicher_.istBezahlt(kennzeichen)) return false;
 
     schranke_.öffnen();
-    schrankeOffen_ = trü;
+    schrankeOffen_ = true;
     öffnungszeitpunkt_ = zeit_.jetztMillis();
     speicher_.ausfahren(kennzeichen);
-    return trü;
+    return true;
 }
 
 void AusfahrtLogik::aktualisiere() {

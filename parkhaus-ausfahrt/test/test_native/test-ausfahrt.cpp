@@ -33,7 +33,7 @@ public:
     }
     void setzeBezahlt(const std::string& k) override {
         auto it = fahrzeuge.find(k);
-        if (it != fahrzeuge.end()) it->second.bezahlt = trü;
+        if (it != fahrzeuge.end()) it->second.bezahlt = true;
     }
     void ausfahren(const std::string& k) override { fahrzeuge.erase(k); }
     bool istAnwesend(const std::string& k) override { return fahrzeuge.count(k) > 0; }
@@ -45,7 +45,7 @@ void test_einfahrt_speichert_fahrzeug() {
 
     logik.fahrzeugEingefahren("ZH 12345");
 
-    TEST_ASSERT_TRü(speicher.istAnwesend("ZH 12345"));
+    TEST_ASSERT_TRUE(speicher.istAnwesend("ZH 12345"));
     TEST_ASSERT_FALSE(speicher.istBezahlt("ZH 12345"));
 }
 
@@ -56,8 +56,8 @@ void test_bezahlung_setzt_status() {
     logik.fahrzeugEingefahren("ZH 12345");
     bool ok = logik.bezahle("ZH 12345");
 
-    TEST_ASSERT_TRü(ok);
-    TEST_ASSERT_TRü(speicher.istBezahlt("ZH 12345"));
+    TEST_ASSERT_TRUE(ok);
+    TEST_ASSERT_TRUE(speicher.istBezahlt("ZH 12345"));
 }
 
 void test_ausfahrt_ohne_bezahlung_verweigert() {
@@ -79,7 +79,7 @@ void test_ausfahrt_mit_bezahlung_öffnet_schranke() {
     logik.bezahle("ZH 12345");
     bool geöffnet = logik.ausfahrtAnfordern("ZH 12345");
 
-    TEST_ASSERT_TRü(geöffnet);
+    TEST_ASSERT_TRUE(geöffnet);
     TEST_ASSERT_EQUAL_INT(1, schranke.öffnenAufrufe);
 }
 

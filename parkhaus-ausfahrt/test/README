@@ -1,11 +1,41 @@
+# Parkhaus – Test Doubles (Branch `testdoubles`)
 
-This directory is intended for PlatformIO Test Runner and project tests.
+Die Logik des Parksystems lässt sich **ohne Hardware** automatisiert testen. Alle Abhängigkeiten sind hinter Schnittstellen versteckt und werden im Test durch Test Doubles ersetzt.
 
-Unit Testing is a software testing method by which individual units of
-source code, sets of one or more MCU program modules together with associated
-control data, usage procedures, and operating procedures, are tested to
-determine whether they are fit for use. Unit testing finds problems early
-in the development cycle.
+## Gruppenmitglieder
 
-More information about PlatformIO Unit Testing:
-- https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
+Alex Egli
+
+## Identifizierte Abhängigkeiten
+
+| Abhängigkeit | Test Double | Begründung |
+| 
+| Schranke (Servo) | **Spy** | Zeichnet auf, ob und wie oft geöffnet bzw. geschlossen wurde – die Bewegung selbst ist im Test nicht prüfbar. |
+| Zeit (`millis()`, `delay()`) | **Stub** | Liefert eine frei setzbare Zeit, damit Wartezeiten in Millisekunden statt in Echtzeit ablaufen. |
+| Kommunikation zwischen den Picos (UART) | **Spy** | Prüft, welches Kennzeichen wie oft gesendet wurde; das Empfangen wird direkt als Methodenaufruf getestet. |
+| Speicherung der Fahrzeuge | **Fake** | Vereinfachte, funktionierende Map-Implementierung mit echtem Zustand, aber ohne Hardware. |
+| Kamera / Weboberfläche | **Stub** | Das Kennzeichen wird als fester String übergeben; die Erkennung ist nicht Teil der Logik. |
+
+Jede Abhängigkeit wird der Logik per Konstruktor übergeben (Dependency Injection). Nur `main.cpp` kennt die echten Hardware-Klassen.
+
+## Automatisierte Tests
+
+
+pio test -e native
+
+Die Tests laufen auch ohne Pico und ohne Servo, das Enviroment  pico bleibt aber unverändert.
+
+Testfall	                                        Geprüftes Verhalten	                                        Bezug Testkonzept
+test_sendet_beim_ersten_aufruf	                    Kennzeichen wird beim ersten Durchlauf gesendet	            TC01
+test_sendet_nicht_vor_ablauf_des_intervalls	        Kein erneutes Senden vor Ablauf des Intervalls	            TC02
+test_sendet_nach_ablauf_des_intervalls	            Erneutes Senden nach Ablauf des Intervalls	                TC11
+test_kennzeichen_wird_korrekt_uebergeben	        Kennzeichen wird unverändert übergeben	                    TC11
+test_einfahrt_speichert_fahrzeug	                Einfahrendes Fahrzeug wird gespeichert, Status unbezahlt    TC01, TC07
+test_bezahlung_setzt_status	                        Bezahlung setzt den Status «bezahlt»	                    TC06, TC07
+test_ausfahrt_ohne_bezahlung_verweigert	            Ohne Bezahlung bleibt die Schranke geschlossen	            TC09
+test_ausfahrt_mit_bezahlung_oeffnet_schranke	    Mit Bezahlung öffnet die Schranke genau einmal	            TC08
+test_kennzeichen_nach_ausfahrt_entfernt	            Fahrzeug ist nach der Ausfahrt nicht mehr anwesend	        TC10
+test_schranke_schliesst_nach_ablauf	                Schranke schliesst erst nach Ablauf der Öffnungsdauer	    TC12
+
+## Fazit
+Die Logik ist vollständig automatisiert testbar. Nicht automatisierbar bleiben die physischen Aspekte: ob der Servo die Schranke wirklich in 2 Sekunden bewegt (T-02, T-06), die Qualität der Kennzeichenerkennung bei schlechten Bedingungen, die reale UART-Übertragung über Kabel sowie das Verhalten bei Stromausfall. Diese Punkte bleiben manuelle Tests.

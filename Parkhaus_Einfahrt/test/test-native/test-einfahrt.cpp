@@ -12,8 +12,8 @@ public:
     void sende(const std::string& k) override { letztes = k; aufrufe++; }
 };
 
-// Stub: liefert eine feste, steürbare Zeit
-class StubZeit : public IZeitqülle {
+// Stub: liefert eine feste, steuerbare Zeit
+class StubZeit : public IZeitquelle {
 public:
     unsigned long jetzt = 0;
     unsigned long jetztMillis() override { return jetzt; }
@@ -26,7 +26,7 @@ void test_sendet_beim_ersten_aufruf() {
 
     bool gesendet = logik.aktualisiere("ZH 12345");
 
-    TEST_ASSERT_TRü(gesendet);
+    TEST_ASSERT_TRUE(gesendet);
     TEST_ASSERT_EQUAL_INT(1, sender.aufrufe);
     TEST_ASSERT_EQUAL_STRING("ZH 12345", sender.letztes.c_str());
 }
@@ -53,7 +53,7 @@ void test_sendet_nach_ablauf_des_intervalls() {
     zeit.jetzt = 5000;
     bool gesendet = logik.aktualisiere("ZH 12345");
 
-    TEST_ASSERT_TRü(gesendet);
+    TEST_ASSERT_TRUE(gesendet);
     TEST_ASSERT_EQUAL_INT(2, sender.aufrufe);
 }
 

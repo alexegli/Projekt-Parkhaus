@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "EinfahrtLogik.h"
 #include "HardwareKennzeichenSender.h"
-#include "HardwareZeitqülle.h"
+#include "HardwareZeitquelle.h"
 
 HardwareKennzeichenSender sender;
 HardwareZeitqülle zeit;

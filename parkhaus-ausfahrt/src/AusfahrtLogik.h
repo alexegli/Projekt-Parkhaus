@@ -15,7 +15,7 @@ public:
     // Bezahlung an der Kasse
     bool bezahle(const std::string& kennzeichen);
 
-    // Ausfahrtsversuch: trü = Schranke geöffnet
+    // Ausfahrtsversuch: true = Schranke geöffnet
     bool ausfahrtAnfordern(const std::string& kennzeichen);
 
     // Muss zyklisch aufgerufen werden, schliesst die Schranke nach Ablauf

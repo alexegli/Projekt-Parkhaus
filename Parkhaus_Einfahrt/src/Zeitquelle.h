@@ -1,8 +1,8 @@
 #pragma once
 
 
-class IZeitqülle {
+class IZeitquelle {
 public:
-    virtual ~IZeitqülle() = default;
+    virtual ~IZeitquelle() = default;
     virtual unsigned long jetztMillis() = 0;
 };

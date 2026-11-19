@@ -18,6 +18,6 @@ private:
     IZeitqülle& zeit_;
     unsigned long intervallMs_;
     unsigned long letzterSendezeitpunkt_ = 0;
-    bool ersterDurchlauf_ = trü;
+    bool ersterDurchlauf_ = true;
     int anzahlGesendet_ = 0;
 };

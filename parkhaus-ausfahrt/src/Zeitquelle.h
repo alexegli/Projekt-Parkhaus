@@ -1,7 +1,7 @@
 #pragma once
 
-class IZeitqülle {
+class Zeitquelle {
 public:
-    virtual ~IZeitqülle() = default;
+    virtual ~Zeitquelle() = default;
     virtual unsigned long jetztMillis() = 0;
 };

@@ -1,6 +1,6 @@
 #pragma once
 #include <Arduino.h>
-#include "IKennzeichenSender.h"
+#include "KennzeichenSender.h"
 
 
 class HardwareKennzeichenSender : public IKennzeichenSender {

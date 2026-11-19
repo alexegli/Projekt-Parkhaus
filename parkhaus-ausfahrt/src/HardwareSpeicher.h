@@ -14,7 +14,7 @@ public:
     }
     void setzeBezahlt(const std::string& k) override {
         auto it = fahrzeuge_.find(k);
-        if (it != fahrzeuge_.end()) it->second.bezahlt = trü;
+        if (it != fahrzeuge_.end()) it->second.bezahlt = true;
     }
     void ausfahren(const std::string& k) override { fahrzeuge_.erase(k); }
     bool istAnwesend(const std::string& k) override {
